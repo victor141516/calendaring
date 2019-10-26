@@ -5,7 +5,7 @@ import fs from 'fs';
 import {calendar_v3, google} from 'googleapis';
 import {getLogger} from './logger';
 
-const config = JSON.parse(fs.readFileSync('../config.json').toString());
+const config = JSON.parse(fs.readFileSync('./config.json').toString());
 const cache = asyncRedis.createClient(config.REDIS_URL);
 const logger = getLogger('Calendaring');
 const app = express();
