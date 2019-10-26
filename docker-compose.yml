@@ -4,6 +4,8 @@ services:
   api:
     image: victor141516/calendaring
     build: .
+    volumes:
+      - ./config.json:/app/config.json
     ports:
       - "3000:3000"
 
