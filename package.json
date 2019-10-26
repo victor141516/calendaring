@@ -1,0 +1,28 @@
+{
+  "name": "calendaring",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "cleanup": "rm -rf dist/",
+    "lint": "tslint -c tslint.json 'src/**/*.ts' -t codeFrame",
+    "lint:fix": "npm run lint -- --fix",
+    "build": "tsc"
+},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async-redis": "^1.1.7",
+    "dayjs": "^1.8.16",
+    "express": "^4.17.1",
+    "googleapis": "^44.0.0",
+    "log4js": "^5.3.0",
+    "typescript": "^3.6.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.1",
+    "ts-node": "^8.4.1",
+    "tslint": "^5.20.0",
+    "tslint-config-prettier": "^1.18.0"
+  }
+}

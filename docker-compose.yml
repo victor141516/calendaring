@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  api:
+    image: victor141516/calendaring
+    build: .
+    ports:
+      - "3000:3000"
+
+  redis:
+    image: "redis:alpine"
+  volumes:
+    - ./cache:/data
+  command: redis-server --appendonly yes

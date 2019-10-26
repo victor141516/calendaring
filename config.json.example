@@ -1,0 +1,7 @@
+{
+    "REDIS_URL": "redis://redis",
+    "CLIENT_ID": "213213213213213-sadsadsadsadsadsadsadsadsadsad.apps.googleusercontent.com",
+    "CLIENT_SECRET": "e2121e2w-32es21ew2deq1de321de",
+    "REDIRECT_URIS": ["https://developers.google.com/oauthplayground"],
+    "REFESH_TOKEN": "1//32q_76gfy7676ygu7gyu-32d3wfwefr_efd32qdde3wqde3wd_wqdfw3qcefdddew-tr6d65fytvfy76vft"
+}
