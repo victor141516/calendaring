@@ -77,7 +77,7 @@ app.get('/get', async (req, res) => {
         res.end();
     }).catch(err => {
         res.statusCode = 400;
-        res.json(err);
+        res.json({error: 'unknown'});
         res.end();
     });
 });
