@@ -5,9 +5,14 @@ import fs from 'fs';
 import {calendar_v3, google} from 'googleapis';
 import {getLogger} from './logger';
 
-const config = JSON.parse(fs.readFileSync('./config.json').toString());
-const cache = asyncRedis.createClient(config.REDIS_URL);
 const logger = getLogger('Calendaring');
+const config = JSON.parse(fs.readFileSync('./config.json').toString());
+let cache: any;
+cache = asyncRedis.createClient(config.REDIS_URL);
+cache.on('error', () => {
+    logger.warn('Working without cache!!');
+});
+
 const app = express();
 const oauth2Client = new google.auth.OAuth2(
     config.CLIENT_ID,
@@ -41,7 +46,8 @@ async function getEventsForDate(fromDate: dayjs.Dayjs, toDate: dayjs.Dayjs, lang
     logger.debug('stringToDate:', stringToDate);
     logger.debug('stringFromDate:', stringFromDate);
     const cacheKey = `${language}-${country}-${stringFromDate}-${stringToDate}`;
-    const cached = await cache.get(cacheKey);
+    let cached: string | undefined;
+    if (cache.ready) cached = await cache.get(cacheKey);
 
     if (cached) {
         logger.debug('Cache hit!');
@@ -58,10 +64,15 @@ async function getEventsForDate(fromDate: dayjs.Dayjs, toDate: dayjs.Dayjs, lang
                 (start as calendar_v3.Schema$EventDateTime).date as string,
                 description ? description.split(':').splice(1).join(':').split(',').map(e => e.trim()) : null
             ));
-        cache.set(cacheKey, JSON.stringify(returnData));
+        if (cache.ready) cache.set(cacheKey, JSON.stringify(returnData));
         return returnData;
     }
 };
+
+app.get('/', (req, res) => {
+    res.send('Main endpoint is /get<br>Parameters are:<br> - fromDate<br> - toDate<br> - language<br> - country');
+    res.end();
+});
 
 app.get('/get', async (req, res) => {
     logger.debug('req:', req.query);
@@ -82,7 +93,9 @@ app.get('/get', async (req, res) => {
     });
 });
 
-app.listen(process.env.PORT, function () {
+process.env.PORT = process.env.PORT || '3000';
+
+app.listen(process.env.PORT, () => {
     logger.info('Listening on port', process.env.PORT);
-  });
+});
   
