@@ -63,8 +63,9 @@ async function getEventsForDate(fromDate: dayjs.Dayjs, toDate: dayjs.Dayjs, lang
                 summary as string,
                 (start as calendar_v3.Schema$EventDateTime).date as string,
                 description ? description.split(':').splice(1).join(':').split(',').map(e => e.trim()) : null
-            ));
-        if (cache.ready) cache.set(cacheKey, JSON.stringify(returnData));
+            )
+        ).filter(e => e.holiday_locations); // hypothesis: google has locations only if is bank holiday
+        if (cache.ready) cache.set(cacheKey, JSON.stringify(returnData)).then(() => cache.expire(cacheKey, 3600 * 24));
         return returnData;
     }
 };
